@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>随机考察知识点 - 即开即用的web服务</title>
+    <link href="/2021/04/21/%E9%9A%8F%E6%9C%BA%E8%80%83%E5%AF%9F%E7%9F%A5%E8%AF%86%E7%82%B9-%E5%8D%B3%E5%BC%80%E5%8D%B3%E7%94%A8%E7%9A%84web%E6%9C%8D%E5%8A%A1/"/>
+    <url>/2021/04/21/%E9%9A%8F%E6%9C%BA%E8%80%83%E5%AF%9F%E7%9F%A5%E8%AF%86%E7%82%B9-%E5%8D%B3%E5%BC%80%E5%8D%B3%E7%94%A8%E7%9A%84web%E6%9C%8D%E5%8A%A1/</url>
+    
+    <content type="html"><![CDATA[<p>这是我在考研前突发奇想做的一个用来随机检测自己某个知识点掌握得如何的小工具。当时正好在学django，就用django+vue做了这么一个小玩意，那么就以这篇文章记录一下这个事吧。</p><span id="more"></span><p>github地址：<a href="https://github.com/Congregalis/question_bank">https://github.com/Congregalis/question_bank</a></p><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>为了模拟初高中时，和同学互相提问抽查知识点的场景，我写了这个小工具。它的功能就是充当你的同学，随机的考察你一些问题，帮助你在考试中取得更好成绩！</p><p>我比较追求简洁使用，就参考vue官方的文档简单写了一个页面，Demo大致如下图</p><p><img src="/img/question_bank/question_bank_vue.png"><br><img src="/img/question_bank/answer.png"></p><h2 id="部署步骤"><a href="#部署步骤" class="headerlink" title="部署步骤"></a>部署步骤</h2><p>本来我考研之前部署在之前买的阿里云服务器上可以直接访问。但是现在过期了没钱续费，想看demo的话可以clone到本地部署运行。</p><p>首先自己创建一个python虚拟环境，然后安装requirement.txt下的包</p><p><code>pip install -r requirement.txt</code></p><p>然后对数据库进行一次初始化</p><p><code>python manage.py makemigrations</code></p><p><code>python manage.py migrate --run-syncdb</code></p><p>然后创建一个用户，否则没有权限新建问题（除了下面通过运行python的方法你也可以操作sqlite数据库新建用户）</p><p><code>python manage.py shell</code> </p><p>打开python命令行，输入以下命令来创建一个admin用户</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> django.contrib.auth.models <span class="hljs-keyword">import</span> User<br>User.objects.create_superuser(username=<span class="hljs-string">&#x27;admin&#x27;</span>, password=<span class="hljs-string">&#x27;123&#x27;</span>, email=<span class="hljs-string">&#x27;no@no,com&#x27;</span>)<br>exit()<br></code></pre></td></tr></table></figure><p>然后开启后台服务</p><p><code>python manage.py runserver</code> </p><p>默认开启在8000端口，当然也可以自己指定端口，此时访问 <a href="localhost:8000">localhost:8000</a> 即可浏览后台管理的api文档（可直接操作），使用刚刚新建的用户登录就可以新建问题了</p><p><img src="/img/question_bank/post_q.png"><br><img src="/img/question_bank/post_res.png"><br><img src="/img/question_bank/categories.png"></p><p>前端页面由vue编写，直接打开项目根目录下的html文件即可浏览（当然，数据库里需要有你新建的问题）</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>小项目</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Hello World</title>
     <link href="/2021/04/19/hello-world/"/>
     <url>/2021/04/19/hello-world/</url>
