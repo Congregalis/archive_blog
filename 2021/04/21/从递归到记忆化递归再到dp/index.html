@@ -14,7 +14,10 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="">
+  <meta name="description" content="介绍今天做了一道题，觉得这个思想还挺有价值的，故写下这篇文记录一下。
+题目是LC91，是一道很基础的题。
+
+解递归看到这个题，一下能想到的方法就是递归搜索了。因为这个题解码时只有两种情况，在某个状态截取1个字符或截取两个字符，所以递归做起来也不会很复杂。">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
@@ -161,7 +164,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.1k 字
+      1.2k 字
     </span>
   
 
@@ -208,6 +211,8 @@
 <p>题目是<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/decode-ways/">LC91</a>，是一道很基础的题。</p>
 <p><img src="/img/20210421dp/question.jpg" srcset="/img/loading.gif" lazyload></p>
 <h2 id="解"><a href="#解" class="headerlink" title="解"></a>解</h2><h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><p>看到这个题，一下能想到的方法就是递归搜索了。<br>因为这个题解码时只有两种情况，在某个状态截取1个字符或截取两个字符，所以递归做起来也不会很复杂。</p>
+<span id="more"></span>
+
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">numDecodings</span><span class="hljs-params">(String s)</span> </span>&#123;<br>        <span class="hljs-comment">// 递归解法（超时）</span><br>        <span class="hljs-keyword">return</span> dfs(s.toCharArray(), s.length(), <span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">char</span>[] chars, <span class="hljs-keyword">int</span> len, <span class="hljs-keyword">int</span> index)</span> </span>&#123;<br>        <span class="hljs-comment">// 找到了一条解码方式</span><br>        <span class="hljs-keyword">if</span> (index &gt;= len) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; <br>        <span class="hljs-comment">// &#x27;0&#x27;没有解码方式（10或20可以在下面截取2个字符时截取得到，所以不用担心这样漏解）</span><br>        <span class="hljs-keyword">if</span> (chars[index] == <span class="hljs-string">&#x27;0&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><br>        <span class="hljs-comment">// 截取1个字符时</span><br>        <span class="hljs-keyword">int</span> res = dfs(chars, len, index + <span class="hljs-number">1</span>);<br>        <span class="hljs-comment">// 截取2个字符时</span><br>        <span class="hljs-keyword">if</span> (index &lt; len - <span class="hljs-number">1</span> &amp;&amp; ((chars[index] - <span class="hljs-string">&#x27;0&#x27;</span>) * <span class="hljs-number">10</span> + (chars[index+<span class="hljs-number">1</span>] - <span class="hljs-string">&#x27;0&#x27;</span>) &lt;= <span class="hljs-number">26</span>))<br>            res += dfs(chars, len, index + <span class="hljs-number">2</span>);<br><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>当然，这个方法毫无疑问会超时，但是这无疑是我们往后优化所必不可少的第一步。</p>
@@ -223,6 +228,10 @@
 <p>是不是觉得dp的方式更加优雅简洁呢。</p>
 <p>其实还有更加节省空间的方式，就是把dp数组换成只使用两个变量。因为这里在计算第i个位置的dp时只用到了i-1与i-2两个位置，我这里就不再写下去啦。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>其实DP和记忆化递归是一样的，只是采用了不同的写法。但是从头直接用动态规划的思想做的话可能会有点困难，所以想不出解法的时候不妨先从最普通的递归开始，一步一步进行优化。</p>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>有什么相关题目值得一做的我会补充在这里。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/combination-sum-iv/">LC337.组合总和 Ⅳ</a></li>
+</ul>
 
             </div>
             <hr>
