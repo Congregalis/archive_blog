@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      940 字
+      966 字
     </span>
   
 
@@ -228,7 +228,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> TreeNode <span class="hljs-title">increasingBST</span><span class="hljs-params">(TreeNode root)</span> </span>&#123;<br>        <span class="hljs-comment">// 迭代 + 记录上一个结点</span><br>        TreeNode dummy = <span class="hljs-keyword">new</span> TreeNode(-<span class="hljs-number">1</span>);<br>        TreeNode pre = dummy;<br>        Deque&lt;TreeNode&gt; deque = <span class="hljs-keyword">new</span> ArrayDeque&lt;&gt;();<br><br>        <span class="hljs-keyword">while</span> (root != <span class="hljs-keyword">null</span> || !deque.isEmpty()) &#123;<br>            <span class="hljs-keyword">while</span> (root != <span class="hljs-keyword">null</span>) &#123;<br>                deque.addLast(root);<br>                root = root.left;<br>            &#125;<br>            root = deque.pollLast();<br>            pre.right = root;<br>            root.left = <span class="hljs-keyword">null</span>;<br>            pre = pre.right;<br>            root = root.right;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> dummy.right;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
 <h3 id="递归-只记录上一个结点"><a href="#递归-只记录上一个结点" class="headerlink" title="递归 + 只记录上一个结点"></a>递归 + 只记录上一个结点</h3><p>留给你们去思考，看懂了上面三个方法相信做出这个解并不困难。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>中序遍历在树的遍历中是一个很常见且很重要的形式。基本上掌握这里的递归+迭代方法就差不多啦。值得一提的是，在二叉搜索树中中序遍历序列其实就是一个有序数组噢。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>中序遍历在树的遍历中是一个很常见且很重要的形式。基本上掌握这里的递归+迭代方法就差不多啦，这里把list替换为只记录前一个结点的技巧其实也是很常用的。值得一提的是，在二叉搜索树中中序遍历序列其实就是一个有序数组噢。</p>
 <h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>有什么相关题目值得一做的我会补充在这里。</p>
 
             </div>
