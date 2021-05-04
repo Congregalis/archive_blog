@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>位运算初探——只出现一次的数字</title>
+    <link href="/2021/05/04/%E4%BD%8D%E8%BF%90%E7%AE%97%E5%88%9D%E6%8E%A2%E2%80%94%E2%80%94%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/"/>
+    <url>/2021/05/04/%E4%BD%8D%E8%BF%90%E7%AE%97%E5%88%9D%E6%8E%A2%E2%80%94%E2%80%94%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/</url>
+    
+    <content type="html"><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>位运算，一个高效的东西，同时也是一直使我非常困扰的一大奇妙算法。在这篇文章中我以一个很简单例子对位运算做一个简单的介绍与探究。</p><p>首先来看例子<a href="https://leetcode-cn.com/problems/single-number/">LC136</a>，题目如下：<br><img src="/img/bitcal1/problem1.png" alt="只出现一次的数字"></p><h2 id="解"><a href="#解" class="headerlink" title="解"></a>解</h2><p>题目很简单，一下就能读完。读完这个题目第一时间就能想到一个简单的解法：使用一个<strong>哈希表</strong>存储每个数字出现次数，然后最后遍历一遍找只出现一次的数字就行了。</p><p>但是题目中的说明要求算法具有<strong>线性时间复杂度</strong>，并且<strong>不使用额外空间</strong>。看到这个要求，其实除了位运算好像还真没啥别的方法了。那么对于这道题位运算怎么做呢？</p><p>这时候就该去思考如何来使用数字的位信息。我们都知道，每一个数字都能转换成二进制数，转换完后每一位不是0就是1，那么我们如何来运用这个位的信息？针对这道题，你可以看到它有一个特殊的约束：除了某个元素只出现一次以外，其余每个元素均出现<strong>两次</strong>。这个两次就很关键啊，除了答案外<strong>相同的元素有且仅有两次</strong>，这不是和位运算中<strong>异或的归零律</strong>相匹配么？</p><blockquote><p>异或：如果异或的两个数不相同，则异或结果为 1，如果异或的两个数相同，则结果为 0<br>异或的归零率 a $\bigoplus$ a = 0</p></blockquote><p>而且异或运算还存在<strong>交换律</strong>和<strong>结合律</strong>，这也就是说我们把数组中全部的数都异或起来，相同的数只存在两个，那相同的数相碰不就为 <strong>0</strong> 了吗。同时由于** 0 异或任何数结果都是那个数**，那可见最终全部的数异或出的答案就是那个只出现一次的数字了。</p><blockquote><p><strong>0异或任何数结果都是那个数</strong> 出自 异或的恒等率：a $\bigoplus$ 0 = a</p></blockquote><p>为了理解得更加清楚，我把0，1两两异或的结果放在这里，你们可以将数转化为二进制再每一位异或一下看看结果，可以更加深刻的理解这个算法。</p><table><thead><tr><th align="center">a</th><th align="center">b</th><th align="center">a $\bigoplus$ b</th></tr></thead><tbody><tr><td align="center">0</td><td align="center">0</td><td align="center">0</td></tr><tr><td align="center">0</td><td align="center">1</td><td align="center">1</td></tr><tr><td align="center">1</td><td align="center">0</td><td align="center">1</td></tr><tr><td align="center">1</td><td align="center">1</td><td align="center">0</td></tr></tbody></table><p>到这里，解法就很明确了，这就是位运算了！</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">singleNumber</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> ans = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> num : nums)<br>            ans ^= num;<br><br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>代码也是非常的简单，位运算十分简洁高效<del>（就是比较难想）</del>。</p><h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><p>这个题目加的限制是<strong>相同的元素有且仅有两次</strong>，那如果不止两次呢？这道<a href="https://leetcode-cn.com/problems/single-number-ii/">LC137</a>可不就来了，它把两次改为了<strong>三次</strong>，同样要求算法具有<strong>线性时间复杂度</strong>，并且<strong>不使用额外空间</strong>，很明显也是要使用位运算的。</p><p>由于这篇文章只是初探，就讲到这里，我会在后面的文章对这道<a href="https://leetcode-cn.com/problems/single-number-ii/">LC137</a>做更进一步的探究！</p><h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>对于要求算法具有<strong>线性时间复杂度</strong>，并且<strong>不使用额外空间</strong>时，不用犹豫，这大概率就是要使用位运算才能解决。这个时候首先要看清有些什么<strong>约束条件</strong>，然后根据不同的位运算以及他们的一些<strong>性质</strong>来思考如何才能有效的利用这些性质。</p><p>对我来说位运算还是挺难的，一起加油攻破这道难关吧！</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>算法</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>位运算</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Java线程的正确使用方式——停止你的new Thread</title>
     <link href="/2021/04/29/Java%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%AD%A3%E7%A1%AE%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E5%81%9C%E6%AD%A2%E4%BD%A0%E7%9A%84new-Thread/"/>
     <url>/2021/04/29/Java%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%AD%A3%E7%A1%AE%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E5%81%9C%E6%AD%A2%E4%BD%A0%E7%9A%84new-Thread/</url>
