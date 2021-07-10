@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fav.png">
+  <link rel="icon" href="/img/fav.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+  <title>React初体验——井字棋及其改进 - Congregalis</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"congregalis.gitee.io","root":"/","version":"1.8.9-a","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Congregalis</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于我
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="React初体验——井字棋及其改进">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-07-10 14:13" pubdate>
+        July 10, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      18
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">React初体验——井字棋及其改进</h1>
+            
+            <div class="markdown-body">
+              <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>最近突然想玩玩前端了，想学点新东西，于是便把矛头转向 React，研究了一下确实很不错。它的<strong>组件化</strong>管理方式我非常喜欢，而且不同于 Vue，以<strong>声明式</strong>的方式来创建 UI 也非常的有意思。这篇文章主要就讲讲我跟着官网上<a target="_blank" rel="noopener" href="https://react.docschina.org/tutorial/tutorial.html">井字棋的教程</a>进行学习，并根据官网提供的可改进内容进行改进的过程。</p>
+<p>本文的源码可以在<a target="_blank" rel="noopener" href="https://github.com/Congregalis/Tic-Tac-Toe">这个地方</a>找到。<br>演示效果在<a target="_blank" rel="noopener" href="http://tic-tac-toe-green-one.vercel.app/">这里</a>看。</p>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p>基础的井字棋步骤我就不多说辣，官网上讲的非常详细且易懂，实现完的大致效果如下：<br><img src="/img/tic-tac-toe/base.png" srcset="/img/loading.gif" lazyload alt="跟着官方教程学完后的效果"></p>
+<p>可以看出还是比较简陋的。</p>
+<h2 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h2><p>教程上给的可改进内容如下：</p>
+<ol>
+<li>在游戏历史记录列表显示每一步棋的坐标，格式为 (列号, 行号)。</li>
+<li>在历史记录列表中加粗显示当前选择的项目。</li>
+<li>使用两个循环来渲染出棋盘的格子，而不是在代码里写死（hardcode）。</li>
+<li>添加一个可以升序或降序显示历史记录的按钮。</li>
+<li>每当有人获胜时，高亮显示连成一线的 3 颗棋子。</li>
+<li>当无人获胜时，显示一个平局的消息。</li>
+</ol>
+<p>下面我们来一个一个看看实现思路。</p>
+<h3 id="在游戏历史记录列表显示每一步棋的坐标，格式为-列号-行号"><a href="#在游戏历史记录列表显示每一步棋的坐标，格式为-列号-行号" class="headerlink" title="在游戏历史记录列表显示每一步棋的坐标，格式为 (列号, 行号)"></a>在游戏历史记录列表显示每一步棋的坐标，格式为 (列号, 行号)</h3><p>这个是最简单的，首先要清楚 history 这个数据结构是什么样的。</p>
+<p>history 是一个历史记录<strong>列表</strong>，列表中的每个元素是一个 <strong>map</strong>，其中包含 squares 等信息。为了方便，我们可以在这个列表里添加一个 currStep（String类型），用来记录当前下棋的位置坐标，然后在每次添加新的 history 的时候把这个坐标加进去就行了。</p>
+<p>下棋时（即会添加新的 history ）加入当前位置坐标：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-title">handleClick</span>(<span class="hljs-params">i</span>)</span> &#123;<br>    <span class="hljs-keyword">const</span> history = <span class="hljs-built_in">this</span>.state.history.slice(<span class="hljs-number">0</span>, <span class="hljs-built_in">this</span>.state.stepNumber + <span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">const</span> current = history[history.length - <span class="hljs-number">1</span>];<br>    <span class="hljs-keyword">const</span> currStep = <span class="hljs-string">&#x27;(&#x27;</span> + <span class="hljs-built_in">Math</span>.floor(i/<span class="hljs-number">3</span>+<span class="hljs-number">1</span>) + <span class="hljs-string">&#x27;, &#x27;</span> + (i%<span class="hljs-number">3</span>+<span class="hljs-number">1</span>) + <span class="hljs-string">&#x27;)&#x27;</span>;<br>    ...<br>    <span class="hljs-built_in">this</span>.setState(&#123;<br>        history: history.concat([&#123;<br>        squares: squares,<br>        currStep: currStep,<br>        &#125;]),<br>        ...<br>    &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>显示时</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> moves = history.map(<span class="hljs-function">(<span class="hljs-params">step, move</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">const</span> desc = move ?<br>        <span class="hljs-string">&#x27;Go to step #&#x27;</span> + move :<br>        <span class="hljs-string">&#x27;Go to game start&#x27;</span>;<br>    <br>    <span class="hljs-keyword">return</span> (<br>    &lt;li ...&gt;<br>        &lt;button className=<span class="hljs-string">&#x27;button&#x27;</span> onClick=&#123;<span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">this</span>.jumpTo(move)&#125;&gt;&#123;desc&#125;&lt;/button&gt;<br>        &amp;nbsp;&amp;nbsp;<br>        &lt;span&gt;&#123;step[<span class="hljs-string">&#x27;currStep&#x27;</span>] ? <span class="hljs-string">&#x27;coordinate: &#x27;</span> + step[<span class="hljs-string">&#x27;currStep&#x27;</span>] : <span class="hljs-string">&#x27;&#x27;</span> &#125;&lt;/span&gt;<br>    &lt;/li&gt;<br>    );<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h3 id="在历史记录列表中加粗显示当前选择的项目"><a href="#在历史记录列表中加粗显示当前选择的项目" class="headerlink" title="在历史记录列表中加粗显示当前选择的项目"></a>在历史记录列表中加粗显示当前选择的项目</h3><p>这一步改进就要涉及到使用 react 动态改变 className 或者是动态修改样式了。</p>
+<p>我这里采用动态修改 style 的方式，在遍历 history 数组渲染 li 标签的时候判断一下当前的序号是否是当前步即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"> &lt;li <br>    key=&#123;move&#125; <br>    style=&#123;&#123;<span class="hljs-attr">fontWeight</span>: (move === <span class="hljs-built_in">this</span>.state.stepNumber) ? <span class="hljs-string">&quot;bold&quot;</span> : <span class="hljs-string">&quot;&quot;</span>&#125;&#125;<br>    &gt;<br>    ...<br>&lt;/li&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="使用两个循环来渲染出棋盘的格子，而不是在代码里写死（hardcode）"><a href="#使用两个循环来渲染出棋盘的格子，而不是在代码里写死（hardcode）" class="headerlink" title="使用两个循环来渲染出棋盘的格子，而不是在代码里写死（hardcode）"></a>使用两个循环来渲染出棋盘的格子，而不是在代码里写死（hardcode）</h3><p>这里我写的比较难懂，其实还是使用 map 的方式来遍历渲染。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> row = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>];<br><span class="hljs-keyword">let</span> cell = [<br>    [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>],<br>    [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>],<br>    [<span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>]<br>];<br><span class="hljs-keyword">let</span> checkerboard = row.map(<span class="hljs-function">(<span class="hljs-params">item, index</span>) =&gt;</span> (<br>    &lt;div className=<span class="hljs-string">&quot;board-row&quot;</span> key=&#123;index&#125;&gt;<br>    &#123;<br>        cell.map(<span class="hljs-function">(<span class="hljs-params">item1, index1</span>) =&gt;</span> <br>        index === index1 ? <br>            item1.map(<span class="hljs-function">(<span class="hljs-params">item2, index2</span>) =&gt;</span> (<br>            <span class="hljs-built_in">this</span>.renderSquare(item2)<br>            )) :<br>            <span class="hljs-string">&quot;&quot;</span><br>        )<br>    &#125;<br>    &lt;/div&gt;<br>));<br></code></pre></td></tr></table></figure>
+
+<h3 id="添加一个可以升序或降序显示历史记录的按钮"><a href="#添加一个可以升序或降序显示历史记录的按钮" class="headerlink" title="添加一个可以升序或降序显示历史记录的按钮"></a>添加一个可以升序或降序显示历史记录的按钮</h3><p>列表本身就有一个 reverse 函数来逆转自身的排列。所以我们只需要再定义一个 flag 来判断是升序还是降序，然后每次执行的时候 reverse 一下 moves 列表就行了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript">reverseHistory = <span class="hljs-function">() =&gt;</span> &#123;<br><span class="hljs-keyword">const</span> isAscendingOrder = <span class="hljs-built_in">this</span>.state.isAscendingOrder;<br>    <span class="hljs-built_in">this</span>.setState(&#123;<br>        isAscendingOrder: !isAscendingOrder<br>    &#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>reverse 操作我放在了每次定义 moves 之后。判断若是升序就不倒转，若是降序就倒转。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.state.isAscendingOrder) &#123;<br>    moves.reverse()<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="每当有人获胜时，高亮显示连成一线的-3-颗棋子"><a href="#每当有人获胜时，高亮显示连成一线的-3-颗棋子" class="headerlink" title="每当有人获胜时，高亮显示连成一线的 3 颗棋子"></a>每当有人获胜时，高亮显示连成一线的 3 颗棋子</h3><p>实现这个功能的时候出了很多bug，还是挺麻烦的（其实还是因为我太菜）。</p>
+<p>核心思路就是：在计算胜利者时多保存一个信息，这个信息用来<strong>保存是哪条线连成了三连棋子</strong>（其实就是三连棋子的位置）。然后在渲染棋盘的时候<strong>动态改变 style</strong> ，如果是连成三连棋子的位置就设置成成你想要的高亮 style （或者使用 css ）。</p>
+<p>核心代码如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-title">renderSquare</span>(<span class="hljs-params">i</span>)</span> &#123;<br>    <span class="hljs-keyword">const</span> line = <span class="hljs-built_in">this</span>.props.winnerLines;<br>    <span class="hljs-keyword">const</span> [a, b, c] = line;<br>    <span class="hljs-keyword">let</span> className =  (i === a || i === b || i === c) ? <span class="hljs-string">&#x27;squareWinner&#x27;</span> : <span class="hljs-string">&#x27;square&#x27;</span>;<br><br>    <span class="hljs-keyword">return</span> (<br>        &lt;Square<br>        key=&#123;i&#125;<br>        className=&#123;className&#125;<br>        value=&#123;<span class="hljs-built_in">this</span>.props.squares[i]&#125;<br>        onClick=&#123;<span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">this</span>.props.onClick(i)&#125;<br>        /&gt;<br>    );<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>还有其他细节可以参考我的源码，在文章最后放出</p>
+<h3 id="当无人获胜时，显示一个平局的消息"><a href="#当无人获胜时，显示一个平局的消息" class="headerlink" title="当无人获胜时，显示一个平局的消息"></a>当无人获胜时，显示一个平局的消息</h3><p>当胜利者未出现，且棋盘被填满了，那就说明平局了。</p>
+<p>判断棋盘是否被填满</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">allFilled</span>(<span class="hljs-params">squares</span>) </span>&#123;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; squares.length; i++) &#123;<br>    <span class="hljs-keyword">const</span> square = squares[i];<br>    <span class="hljs-keyword">if</span> (square == <span class="hljs-literal">null</span>) &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>status 显示</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> status;<br><span class="hljs-keyword">if</span> (winner) &#123;<br>    status = <span class="hljs-string">&#x27;Winner: &#x27;</span> + winner;<br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    status = allFilled(current.squares) ?<br>    <span class="hljs-string">&#x27;Draw &#x27;</span> : <span class="hljs-string">&#x27;Next player: &#x27;</span> + (<span class="hljs-built_in">this</span>.state.xIsNext ? <span class="hljs-string">&#x27;X&#x27;</span> : <span class="hljs-string">&#x27;O&#x27;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h3><p><img src="/img/tic-tac-toe/mine.png" srcset="/img/loading.gif" lazyload alt="改进后的效果"></p>
+<p>演示效果可以去<a target="_blank" rel="noopener" href="https://github.com/Congregalis/Tic-Tac-Toe">我的仓库</a>看图，也可以直接<a target="_blank" rel="noopener" href="https://tic-tac-toe-green-one.vercel.app/">在线看</a>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这就是本次我对 React 初次学习的全部内容了，当然对这个井字棋的可改进内容绝不止如此，实现这些改进内容的方式也绝不止如此，在以后的学习中还希望多多努力，深入挖掘更多的细节！</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%B0%8F%E9%A1%B9%E7%9B%AE/">小项目</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
+                    
+                      <a class="hover-with-bg" href="/tags/React/">React</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/07/07/%E4%BD%BF%E7%94%A8torchtext%E5%A4%84%E7%90%86%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E9%9B%86/">
+                        <span class="hidden-mobile">使用torchtext处理文本数据集</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
