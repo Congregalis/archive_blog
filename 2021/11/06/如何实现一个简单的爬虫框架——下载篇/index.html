@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fav.png">
+  <link rel="icon" href="/img/fav.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+  <title>如何实现一个简单的爬虫框架——下载篇 - Congregalis</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"congregalis.gitee.io","root":"/","version":"1.8.9-a","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Congregalis</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于我
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="如何实现一个简单的爬虫框架——下载篇">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-11-06 17:31" pubdate>
+        November 6, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.5k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      19
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">如何实现一个简单的爬虫框架——下载篇</h1>
+            
+            <div class="markdown-body">
+              <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在上文中我们设计好了一个简单的爬虫框架，并为每个模块都提供了一个实现类，除了 Downloader。所以这一章里我们来研究一下 Downloader 的实现，如何去网络上下载得到一个页面所需要的 html。其实也就是像我们日常浏览器做的事，我们输入网址，浏览器给我们返回一个 html 页面，我们要实现的就是这个功能。Apache HttpComponents 下的 HttpClient 工具包为我们实现了很好的基础，它支持 HTTP 最新的版本和建议，所以本文我们就使用这个工具包来完成我们的 Dowanloader。</p>
+<h2 id="HttpClient"><a href="#HttpClient" class="headerlink" title="HttpClient"></a>HttpClient</h2><p>本文基于 <strong>HttpClient4.5.13</strong>，也是目前 maven 仓库被使用最多的一个版本。<br><img src="/img/tiny-crawler/HttpClient.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>下载十分简单，对应 pom.xml 文件加入相应依赖即可</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- jsoup--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.jsoup<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jsoup<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.11.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br>    <span class="hljs-comment">&lt;!-- 以下为新加入 --&gt;</span><br>    <span class="hljs-comment">&lt;!-- httpclient --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.httpcomponents<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>httpclient<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>4.5.13<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>我们新建一个 HttpUtil 类来负责所有的要访问 HTTP 服务的功能。</p>
+<p>HttpClient 的使用其实也不难，具体步骤如下：</p>
+<ol>
+<li><p>创建 httpClient 对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">CloseableHttpClient httpClient = HttpClients.createDefault();<br></code></pre></td></tr></table></figure></li>
+<li><p>创建要访问的地址对象（因为 httpClient 接收 URI 对象）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// url 待爬取页面的链接</span><br>URIBuilder uriBuilder = <span class="hljs-keyword">new</span> URIBuilder(url);<br>URI uri = uriBuilder.build();<br></code></pre></td></tr></table></figure></li>
+<li><p>创建 http 对象，这里使用 HttpGet，因为我们爬虫大多数发送的是 get 请求</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">HttpGet httpGet = <span class="hljs-keyword">new</span> HttpGet(uri);<br></code></pre></td></tr></table></figure></li>
+<li><p>做一些自定义的设置，这里的设置十分多，可以自己参照 api 根据需要去设置，这里只是简单示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// CONNECT_TIMEOUT 连接超时时间，单位毫秒</span><br><span class="hljs-comment">// SOCKET_TIMEOUT 请求获取数据的超时时间，单位毫秒</span><br><span class="hljs-comment">// 以上常量自行设置</span><br>RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();<br>httpGet.setConfig(requestConfig);<br></code></pre></td></tr></table></figure></li>
+<li><p>创建 httpResponse 对象并获取响应</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java">CloseableHttpResponse httpResponse = <span class="hljs-keyword">null</span>;<br><br><span class="hljs-keyword">try</span> &#123;<br>    <span class="hljs-comment">// 执行请求并获得响应结果</span><br>    httpResponse = httpClient.execute(httpGet);<br>    <span class="hljs-comment">// 获取返回结果</span><br>    <span class="hljs-keyword">if</span> (httpResponse != <span class="hljs-keyword">null</span> &amp;&amp; httpResponse.getStatusLine() != <span class="hljs-keyword">null</span>) &#123;<br>        String content = <span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-keyword">if</span> (httpResponse.getEntity() != <span class="hljs-keyword">null</span>) &#123;<br>            content = EntityUtils.toString(httpResponse.getEntity(), ENCODING);<br>            System.out.println(content);<br>        &#125;<br><br>    &#125;<br><br>&#125; <span class="hljs-keyword">finally</span> &#123;<br>    <span class="hljs-comment">// 释放资源</span><br>    <span class="hljs-keyword">if</span> (httpResponse != <span class="hljs-keyword">null</span>) httpResponse.close();<br>    <span class="hljs-keyword">if</span> (httpClient != <span class="hljs-keyword">null</span>) httpClient.close();<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>至此就是 HttpClient 最简单最基础的步骤了，最终会得到的 content 即要爬取页面的 html 文档，这个我们可以再交由 Jsoup 去解析，这个就是 Processor 要做的事了。</p>
+<h2 id="Downloader"><a href="#Downloader" class="headerlink" title="Downloader"></a>Downloader</h2><p>做好了 HttpClient 之后，实现 Downloader 就简单了。Downloader 的任务就是根据链接获取 html ，然后传给 Page 就行了，所以我们这里做一个 Downloader 的实现类，调用一下刚刚实现的 HttpClient 的方法即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HttpClientDownloader</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Downloader</span> </span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Page <span class="hljs-title">download</span><span class="hljs-params">(String url)</span> </span>&#123;<br>        String html = <span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-keyword">try</span> &#123;<br>            html = HttpUtil.getInstance().doGet(url);<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Page(url, html);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="整合所有步骤"><a href="#整合所有步骤" class="headerlink" title="整合所有步骤"></a>整合所有步骤</h2><p>至此，我们的所有模块都定义并实现完毕，是时候把这些东西都串起来看一看效果了！新建一个 Crawler 类作为启动类，就开始我们的表演吧。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Crawler</span> </span>&#123;<br><br>    <span class="hljs-keyword">private</span> Scheduler scheduler;<br>    <span class="hljs-keyword">private</span> Downloader downloader;<br>    <span class="hljs-keyword">private</span> Processor processor;<br>    <span class="hljs-keyword">private</span> Saver saver;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> threadNum = <span class="hljs-number">5</span>;<br>    <span class="hljs-keyword">private</span> ThreadPoolExecutor poolExecutor;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Crawler</span><span class="hljs-params">()</span> </span>&#123;<br>        init();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Crawler <span class="hljs-title">build</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Crawler();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>&#123;<br>        thread(threadNum);<br><br>        <span class="hljs-keyword">if</span> (scheduler == <span class="hljs-keyword">null</span>) scheduler = <span class="hljs-keyword">new</span> QueueScheduler();<br>        <span class="hljs-keyword">if</span> (downloader == <span class="hljs-keyword">null</span>) downloader = <span class="hljs-keyword">new</span> HttpClientDownloader();<br>        <span class="hljs-keyword">if</span> (processor == <span class="hljs-keyword">null</span>) processor = <span class="hljs-keyword">new</span> SimpleTextProcessor();<br>        <span class="hljs-keyword">if</span> (saver == <span class="hljs-keyword">null</span>) saver = <span class="hljs-keyword">new</span> ConsoleSaver();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Crawler <span class="hljs-title">thread</span><span class="hljs-params">(<span class="hljs-keyword">int</span> num)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> thread(num, <span class="hljs-number">1500L</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Crawler <span class="hljs-title">thread</span><span class="hljs-params">(<span class="hljs-keyword">int</span> num, <span class="hljs-keyword">long</span> keepAliveTime)</span> </span>&#123;<br>        threadNum = num;<br><br>        poolExecutor = <span class="hljs-keyword">new</span> ThreadPoolExecutor(threadNum, threadNum, keepAliveTime, TimeUnit.MILLISECONDS, <span class="hljs-keyword">new</span> LinkedBlockingQueue&lt;&gt;());<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Crawler <span class="hljs-title">setScheduler</span><span class="hljs-params">(Scheduler scheduler)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.scheduler = scheduler;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Crawler <span class="hljs-title">setDownloader</span><span class="hljs-params">(Downloader downloader)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.downloader = downloader;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Crawler <span class="hljs-title">setProcessor</span><span class="hljs-params">(Processor processor)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.processor = processor;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Crawler <span class="hljs-title">setSaver</span><span class="hljs-params">(Saver saver)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.saver = saver;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Crawler <span class="hljs-title">addSeed</span><span class="hljs-params">(String url)</span> </span>&#123;<br>        scheduler.offer(url);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br><br>        <span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) &#123;<br>            String seed = scheduler.poll();<br>            <span class="hljs-keyword">if</span> (seed == <span class="hljs-keyword">null</span> &amp;&amp; poolExecutor.getActiveCount() == <span class="hljs-number">0</span>) &#123;<br>                poolExecutor.shutdown();<br>                <span class="hljs-keyword">break</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (seed == <span class="hljs-keyword">null</span>) &#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    TimeUnit.MILLISECONDS.sleep(<span class="hljs-number">1000</span>);<br>                &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                    e.printStackTrace();<br>                &#125;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                poolExecutor.execute(() -&gt; &#123;<br>                    Page currPage = downloader.download(seed);<br>                    processor.process(currPage);<br>                    currPage.getNextSeeds().forEach(url -&gt; scheduler.offer(url));<br>                    saver.save(currPage);<br>                &#125;);<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们使用建造者模式，方便这个类可以链式地调用，因为我们需要设置很多组件进去。同时为了多线程使用，我们开了一个线程池 <code>ThreadPoolExecutor</code>，它的好处是自定义程度比较高，可以设定 keepalive 时间、自定义阻塞队列等。这里我们都先用最简单的来做。</p>
+<p>我们在 <code>run</code> 方法中逐一实现在上文设计篇中所设计的步骤，其实逻辑很简单。</p>
+<p>新建一个测试类，来测试我们的爬虫吧！</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SimpleExample</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        String seed = <span class="hljs-string">&quot;https://baike.baidu.com/item/%E5%BA%95%E7%89%B9%E5%BE%8B/1660180#hotspotmining&quot;</span>;<br>        Crawler.build().addSeed(seed).run();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以看到运行很成功，并且支持多线程，速度很快。<br><img src="/img/tiny-crawler/simple_example.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>至此我们实现了一个最简单基础的爬虫框架，并且让它成功跑起来了。但是当然地，这其中还存在许多的问题，比如上面截图中你会发现存在重复的链接访问，我们当然不希望这样，而且我们这里做的 HttpClientUtil 过于简单，可能还需要对应不同网站要求加一些设置如请求头等。除此之外，我们可能还想要过滤掉我们不想访问的域名，总不能无休止地爬下去，这之后还做的事情还有很多。所以这个爬虫框架的实现还远没有结束，接下来我们会对哪些地方需要优化，又该如何去优化去做深入的探究。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%B0%8F%E9%A1%B9%E7%9B%AE/">小项目</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java/">Java</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/11/05/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E2%80%94%E2%80%94%E8%AE%BE%E8%AE%A1%E7%AF%87/">
+                        <span class="hidden-mobile">如何实现一个简单的爬虫框架——设计篇</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
