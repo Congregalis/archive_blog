@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      19
+      20
        分钟
     </span>
   
@@ -229,6 +229,7 @@
             
             <div class="markdown-body">
               <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在上文中我们设计好了一个简单的爬虫框架，并为每个模块都提供了一个实现类，除了 Downloader。所以这一章里我们来研究一下 Downloader 的实现，如何去网络上下载得到一个页面所需要的 html。其实也就是像我们日常浏览器做的事，我们输入网址，浏览器给我们返回一个 html 页面，我们要实现的就是这个功能。Apache HttpComponents 下的 HttpClient 工具包为我们实现了很好的基础，它支持 HTTP 最新的版本和建议，所以本文我们就使用这个工具包来完成我们的 Dowanloader。</p>
+<p>本文介绍完后就实现了一个最最简陋的爬虫框架，可以在 <a target="_blank" rel="noopener" href="https://github.com/Congregalis/tiny-crawler">tiny-crawler</a> 中 tag 切换到 <strong>0.1.0</strong> 查看这个版本。</p>
 <h2 id="HttpClient"><a href="#HttpClient" class="headerlink" title="HttpClient"></a>HttpClient</h2><p>本文基于 <strong>HttpClient4.5.13</strong>，也是目前 maven 仓库被使用最多的一个版本。<br><img src="/img/tiny-crawler/HttpClient.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>下载十分简单，对应 pom.xml 文件加入相应依赖即可</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- jsoup--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.jsoup<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jsoup<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.11.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br>    <span class="hljs-comment">&lt;!-- 以下为新加入 --&gt;</span><br>    <span class="hljs-comment">&lt;!-- httpclient --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.httpcomponents<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>httpclient<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>4.5.13<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br></code></pre></td></tr></table></figure>
@@ -261,6 +262,7 @@
 
 <p>可以看到运行很成功，并且支持多线程，速度很快。<br><img src="/img/tiny-crawler/simple_example.png" srcset="/img/loading.gif" lazyload></p>
 <h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>至此我们实现了一个最简单基础的爬虫框架，并且让它成功跑起来了。但是当然地，这其中还存在许多的问题，比如上面截图中你会发现存在重复的链接访问，我们当然不希望这样，而且我们这里做的 HttpClientUtil 过于简单，可能还需要对应不同网站要求加一些设置如请求头等。除此之外，我们可能还想要过滤掉我们不想访问的域名，总不能无休止地爬下去，这之后还做的事情还有很多。所以这个爬虫框架的实现还远没有结束，接下来我们会对哪些地方需要优化，又该如何去优化去做深入的探究。</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/Congregalis/tiny-crawler">tiny-crawler</a> （tag 切换到 <strong>0.1.0</strong> 查看本文版本）</p>
 
             </div>
             <hr>
@@ -296,6 +298,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/11/13/%E4%BD%BF%E7%94%A8docker%E6%90%AD%E5%BB%BAnextcloud%E7%A7%81%E4%BA%BA%E7%BD%91%E7%9B%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">使用docker搭建nextcloud私人网盘</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
