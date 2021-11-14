@@ -182,6 +182,58 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/11/14/%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E4%BC%98%E5%8C%96%E2%80%94%E2%80%94url%E5%8E%BB%E9%87%8D/">爬虫框架优化——url去重</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/11/14/%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E4%BC%98%E5%8C%96%E2%80%94%E2%80%94url%E5%8E%BB%E9%87%8D/">
+          
+          
+            
+          
+          在上文的结果截图中可以看出存在重复的爬取结果，而且如果允许链接有重复，那很可能造成一个闭环，这显然不是我们想要的，因此我们对其进行一个去重。
+实现Baseline之前的实现中，只是简单把符合条件的 url 加入到待爬取列表中，并未实现去重。
+123456789public void getNewSeeds(Page page) &#123;    List&lt;String&gt; links 
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-11-14 20:50" pubdate>
+              2021-11-14
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E5%B0%8F%E9%A1%B9%E7%9B%AE/">小项目</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Java/">Java</a>
+            
+              <a href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/11/13/%E4%BD%BF%E7%94%A8docker%E6%90%AD%E5%BB%BAnextcloud%E7%A7%81%E4%BA%BA%E7%BD%91%E7%9B%98/">使用docker搭建nextcloud私人网盘</a>
       </h1>
 
@@ -638,57 +690,6 @@
               <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%BC%80%E5%8F%91/">移动开发</a>
             
               <a href="/tags/flutter/">flutter</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/05/07/%E4%BD%BF%E7%94%A8SpringBoot%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%A4%84%E7%90%86%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1/">使用SpringBoot的线程池处理异步任务</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/05/07/%E4%BD%BF%E7%94%A8SpringBoot%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%A4%84%E7%90%86%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1/">
-          
-          
-            
-          
-          介绍最近在做项目时了解了最好不要直接使用 new Thread(...).start() ，用线程池来隐式的维护所有线程，具体为什么可以看这篇文章。
-其实 SpringBoot 已经为我们创建并配置好了这个东西，这里就来学习一下如何来使用 SpringBoot 为我们设置的线程池。
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-05-07 21:34" pubdate>
-              2021-05-07
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E6%8A%80%E6%9C%AF%E5%B0%8F%E6%8A%80%E5%B7%A7/">技术小技巧</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Java/">Java</a>
-            
-              <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
             
           </div>
         
