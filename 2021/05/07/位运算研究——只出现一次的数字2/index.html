@@ -58,11 +58,12 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"congregalis.gitee.io","root":"/","version":"1.8.9-a","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"congregalis.github.io","root":"/","version":"1.8.9-a","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Congregalis" type="application/atom+xml">
+</head>
 
 
 <body>
@@ -230,7 +231,7 @@
             <h1 style="display: none">位运算研究——只出现一次的数字2</h1>
             
             <div class="markdown-body">
-              <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>这一篇接着<a href="https://congregalis.gitee.io/2021/05/04/%E4%BD%8D%E8%BF%90%E7%AE%97%E5%88%9D%E6%8E%A2%E2%80%94%E2%80%94%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/">上一篇</a>来说说位运算，首先看题目<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/single-number-ii/">LC137</a>。</p>
+              <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>这一篇接着<a target="_blank" rel="noopener" href="https://congregalis.gitee.io/2021/05/04/%E4%BD%8D%E8%BF%90%E7%AE%97%E5%88%9D%E6%8E%A2%E2%80%94%E2%80%94%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/">上一篇</a>来说说位运算，首先看题目<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/single-number-ii/">LC137</a>。</p>
 <p><img src="/img/bitcal2/problem.png" srcset="/img/loading.gif" lazyload alt="只出现一次的数字 II"></p>
 <h2 id="解"><a href="#解" class="headerlink" title="解"></a>解</h2><p>这个题与上一题的区别仅在于将除答案外的元素出现次数从两次变成了<strong>三次</strong>，所以直接使用哈希表也是可以做的，但我们这里要探究<strong>位运算</strong>的解法。</p>
 <span id="more"></span>
